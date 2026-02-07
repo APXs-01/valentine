@@ -112,3 +112,23 @@ exports.getAllResponses = async (req, res) => {
         res.status(500).json({ error: 'Server error', details: error.message });
     }
 };
+
+// Get single user response
+exports.getUserResponse = async (req, res) => {
+    try {
+        const { userId } = req.params;
+
+        const userResponse = await Response.findById(userId);
+        
+        if (!userResponse) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+
+        res.status(200).json({
+            success: true,
+            data: userResponse
+        });
+    } catch (error) {
+        res.status(500).json({ error: 'Server error', details: error.message });
+    }
+};
