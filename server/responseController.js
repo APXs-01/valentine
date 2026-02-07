@@ -78,3 +78,37 @@ exports.completeCelebration = async (req, res) => {
         res.status(500).json({ error: 'Server error', details: error.message });
     }
 };
+
+// Get all responses (for admin/analytics)
+exports.getAllResponses = async (req, res) => {
+    try {
+        const responses = await Response.find().sort({ createdAt: -1 });
+
+        // Calculate statistics
+        const totalUsers = responses.length;
+        const completedUsers = responses.filter(r => r.completedAt !== null).length;
+        
+        const yesCount = responses.reduce((count, user) => {
+            const yesResponses = user.screenResponses.filter(r => r.response === 'Yes').length;
+            return count + yesResponses;
+        }, 0);
+
+        const noCount = responses.reduce((count, user) => {
+            const noResponses = user.screenResponses.filter(r => r.response === 'No').length;
+            return count + noResponses;
+        }, 0);
+
+        res.status(200).json({
+            success: true,
+            statistics: {
+                totalUsers,
+                completedUsers,
+                totalYesClicks: yesCount,
+                totalNoClicks: noCount
+            },
+            responses
+        });
+    } catch (error) {
+        res.status(500).json({ error: 'Server error', details: error.message });
+    }
+};
