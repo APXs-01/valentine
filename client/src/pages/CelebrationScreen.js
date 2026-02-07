@@ -1,12 +1,15 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 
 function CelebrationScreen({ userName }) {
+  const [showPopup, setShowPopup] = useState(false);
+
   useEffect(() => {
     createConfetti();
     createFloatingHearts();
     
+    // Show popup after 1 second
     setTimeout(() => {
-      alert(`Happy Valentine's Day, ${userName}! 💕💕💕`);
+      setShowPopup(true);
     }, 1000);
   }, [userName]);
 
@@ -50,9 +53,20 @@ function CelebrationScreen({ userName }) {
     <div className="container">
       <div className="screen celebration-screen">
         <h1>YAYYYY!!!</h1>
-        <div className="firework">🎆</div>
+        <div className="firework">🌸</div>
         <p className="subtitle">I knew you'd say yes! 💝</p>
       </div>
+
+      {showPopup && (
+        <div className="popup-overlay" onClick={() => setShowPopup(false)}>
+          <div className="popup-box" onClick={(e) => e.stopPropagation()}>
+            <h2>Happy Valentine's Day, {userName}! 💕💕💕</h2>
+            <button className="popup-close-btn" onClick={() => setShowPopup(false)}>
+              OK
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -1,10 +1,11 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useState } from 'react';
 
 function QuestionScreen({ screenNumber, onNext, onCelebrate }) {
   const noBtnRef = useRef(null);
+  const [noButtonText, setNoButtonText] = useState('No');
 
   const screens = {
-    1: { emoji: '🥰', warning: null },
+    1: { emoji: '😘', warning: null },
     2: { emoji: '💖', warning: 'Are you sure?' },
     3: { emoji: '❤️', warning: 'You better say yes...' },
     4: { emoji: '😍', warning: 'Last chance!' }
@@ -13,11 +14,8 @@ function QuestionScreen({ screenNumber, onNext, onCelebrate }) {
   const currentScreen = screens[screenNumber];
 
   const handleYesClick = () => {
-    if (screenNumber < 4) {
-      onNext(screenNumber + 1, 'Yes');
-    } else {
-      onCelebrate();
-    }
+    // ANY Yes click goes directly to celebration!
+    onCelebrate();
   };
 
   const handleNoClick = (e) => {
@@ -25,9 +23,15 @@ function QuestionScreen({ screenNumber, onNext, onCelebrate }) {
     if (screenNumber === 4) {
       e.preventDefault();
       moveButton();
+      changeButtonText();
     } else {
       onNext(screenNumber + 1, 'No');
     }
+  };
+
+  const changeButtonText = () => {
+    setNoButtonText("No no, you're mine!!!! 💕");
+    setTimeout(() => setNoButtonText('No'), 3000);
   };
 
   const moveButton = () => {
@@ -62,6 +66,7 @@ function QuestionScreen({ screenNumber, onNext, onCelebrate }) {
   const handleNoHover = () => {
     if (screenNumber === 4) {
       moveButton();
+      changeButtonText();
     }
   };
 
@@ -84,7 +89,7 @@ function QuestionScreen({ screenNumber, onNext, onCelebrate }) {
             onClick={handleNoClick}
             onMouseOver={handleNoHover}
           >
-            No
+            {noButtonText}
           </button>
         </div>
       </div>

@@ -13,9 +13,8 @@ function WelcomeScreen({ onStart }) {
   return (
     <div className="container">
       <div className="screen welcome-screen">
-        <h1>Hi babe 💕</h1>
-        <p>Check this out (it's safe I swear)</p>
-        <p>-Love, your babe</p>
+        <h1> 💕  Hi  💕</h1>
+        
         
         <form onSubmit={handleSubmit}>
           <input
