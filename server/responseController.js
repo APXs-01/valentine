@@ -53,3 +53,28 @@ exports.saveResponse = async (req, res) => {
         res.status(500).json({ error: 'Server error', details: error.message });
     }
 };
+
+// Mark as completed (celebration)
+exports.completeCelebration = async (req, res) => {
+    try {
+        const { userId } = req.body;
+
+        const userResponse = await Response.findById(userId);
+        
+        if (!userResponse) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+
+        userResponse.finalResponse = 'Celebrating';
+        userResponse.completedAt = new Date();
+
+        await userResponse.save();
+
+        res.status(200).json({
+            success: true,
+            message: 'Celebration completed'
+        });
+    } catch (error) {
+        res.status(500).json({ error: 'Server error', details: error.message });
+    }
+};
